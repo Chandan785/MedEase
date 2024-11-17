@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="signin.css">
+    <title>Sign In</title>
+</head>
+<header>
+    <nav>
+        <div class="logo">MedEase</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="sign-in.html" class="btn login">Login</a>
+            <a href="sign-up.html" class="btn signup">Sign Up</a>
+        </div>
+    </nav>
+</header>
+<body>
+    <div class="container">
+        <h1>Sign In</h1>
+        <button class="btn" id="signInUserBtn">Sign In as User</button>
+        <button class="btn" id="signInOrgBtn">Sign In as Organization</button>
+
+        <!-- User Sign In -->
+        <form class="form-section" id="signInUserForm" onsubmit="handleUserSignIn(event);">
+            <h2>Sign In as User</h2>
+            <label class="form-label" for="abhaId">ABHA ID</label>
+            <input type="text" id="abhaId" placeholder="Enter your ABHA ID" required>
+            <label class="form-label" for="userPassword">Password</label>
+            <input type="password" id="userPassword" placeholder="Enter your password" required>
+            <button type="submit" class="form-btn">Submit</button>
+        </form>
+
+        <!-- Organization Sign In -->
+        <form class="form-section" id="signInOrgForm" onsubmit="handleOrgSignIn(event);">
+            <h2>Sign In as Organization</h2>
+            <label class="form-label" for="orgName">Organization Name</label>
+            <input type="text" id="orgName" placeholder="Enter organization name" required>
+            <label class="form-label" for="orgId">Organization ID</label>
+            <input type="text" id="orgId" placeholder="Enter organization ID" required>
+            <label class="form-label" for="orgPassword">Password</label>
+            <input type="password" id="orgPassword" placeholder="Enter password" required>
+            <button type="submit" class="form-btn">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // Toggle between User and Organization Sign In
+        document.getElementById('signInUserBtn').addEventListener('click', () => {
+            toggleSection('signInUserForm');
+        });
+        document.getElementById('signInOrgBtn').addEventListener('click', () => {
+            toggleSection('signInOrgForm');
+        });
+
+        function toggleSection(sectionId) {
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Handle User Sign In
+        function handleUserSignIn(event) {
+            event.preventDefault(); // Prevent form submission
+            const abhaId = document.getElementById("abhaId").value;
+            const userPassword = document.getElementById("userPassword").value;
+
+            // Basic validation (replace with server-side validation as needed)
+            if (abhaId === "user123" && userPassword === "password") {
+                alert("User Sign-In successful!");
+                window.location.href = "patient.html";
+            } else {
+                alert("Invalid ABHA ID or password.");
+            }
+        }
+
+        // Handle Organization Sign In
+        function handleOrgSignIn(event) {
+            event.preventDefault(); // Prevent form submission
+            const orgName = document.getElementById("orgName").value;
+            const orgId = document.getElementById("orgId").value;
+            const orgPassword = document.getElementById("orgPassword").value;
+
+            // Basic validation (replace with server-side validation as needed)
+            if (orgName === "OrgABC" && orgId === "org123" && orgPassword === "password") {
+                alert("Organization Sign-In successful!");
+                window.location.href = "oraganization.html";
+            } else {
+                alert("Invalid organization credentials.");
+            }
+        }
+    </script>
+</body>
+</html>

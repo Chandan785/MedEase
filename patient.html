@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+    <link rel="stylesheet" href="patient.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header Section -->
+        <header class="dashboard-header">
+           <h2><a href="Frontpage.html">Home</a></h2> 
+            <h1>Patient Dashboard</h1>
+            
+            <div class="profile-section">
+                <button class="profile-btn">Profile</button>
+                <div class="profile-dropdown">
+                    <ul>
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="#">Edit</a></li>
+                        <li><a href="#">ABHA ID</a></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- Date Range Filter Section -->
+        <section class="date-filter">
+            <h2>Filter Reports by Date</h2>
+            <form id="date-filter-form">
+                <label for="start-date">Start Date:</label>
+                <input type="date" id="start-date" name="start-date" required>
+                
+                <label for="end-date">End Date:</label>
+                <input type="date" id="end-date" name="end-date" required>
+
+                <button type="submit">Filter</button>
+            </form>
+        </section>
+
+        <!-- Reports Table Section -->
+        <section class="reports-table">
+            <h2>Available Reports</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date of Report Generation</th>
+                        <th>Organization Name</th>
+                        <th>Report Type</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody id="report-rows">
+                    <!-- Dynamic rows will be injected here -->
+                </tbody>
+            </table>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="signup.css">
+    <title>Medical Details Sign Up</title>
+    <style>
+        /* Ensure only the active form is visible */
+        .form-section {
+            display: none;
+        }
+        .form-section.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<header>
+    <nav>
+        <div class="logo">MedEase</div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="#about">About Us</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="sign-in.html" class="btn login">Login</a>
+            <a href="sign-up.html" class="btn signup">Sign Up</a>
+        </div>
+    </nav>
+</header>
+
+<body>
+    <div class="container">
+        <h1>Sign Up</h1>
+        <div>
+            <button class="btn" id="signUpUserBtn">Sign Up as User</button>
+            <button class="btn" id="signUpOrgBtn">Sign Up as Organization</button>
+        </div>
+
+        <!-- User Sign Up Form -->
+        <form class="form-section" id="signUpUserForm" onsubmit="handleUserSignUp(event);">
+            <h2>Sign Up as User</h2>
+            <label class="form-label" for="userName">Name</label>
+            <input type="text" id="userName" placeholder="Enter your name" required>
+            <label class="form-label" for="userAbhaId">ABHA ID</label>
+            <input type="text" id="userAbhaId" placeholder="Enter your ABHA ID" required>
+            <label class="form-label" for="userContact">Contact No</label>
+            <input type="text" id="userContact" placeholder="Enter your contact number" required>
+            <label class="form-label" for="userEmail">Email</label>
+            <input type="email" id="userEmail" placeholder="Enter your email" required>
+            <label class="form-label" for="userPassword">Password</label>
+            <input type="password" id="userPassword" placeholder="Enter your password" required>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+
+        <!-- Organization Sign Up Form -->
+        <form class="form-section" id="signUpOrgForm" onsubmit="handleOrgSignUp(event);">
+            <h2>Sign Up as Organization</h2>
+            <label class="form-label" for="orgName">Organization Name</label>
+            <input type="text" id="orgName" placeholder="Enter organization name" required>
+            <label class="form-label" for="orgEmail">Organization Email</label>
+            <input type="email" id="orgEmail" placeholder="Enter organization email" required>
+            <label class="form-label" for="orgPassword">Password</label>
+            <input type="password" id="orgPassword" placeholder="Enter password" required>
+            <button type="submit" class="btn">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        // Toggle between User and Organization Sign Up forms
+        document.getElementById('signUpUserBtn').addEventListener('click', () => {
+            toggleSection('signUpUserForm');
+        });
+
+        document.getElementById('signUpOrgBtn').addEventListener('click', () => {
+            toggleSection('signUpOrgForm');
+        });
+
+        function toggleSection(sectionId) {
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Handle User Sign Up
+        function handleUserSignUp(event) {
+            event.preventDefault(); // Prevent default form submission
+            const userName = document.getElementById('userName').value;
+            const userAbhaId = document.getElementById('userAbhaId').value;
+            const userContact = document.getElementById('userContact').value;
+            const userEmail = document.getElementById('userEmail').value;
+            const userPassword = document.getElementById('userPassword').value;
+
+            console.log('User Sign Up Details:', { userName, userAbhaId, userContact, userEmail, userPassword });
+            alert('User Sign-Up Successful!');
+        }
+
+        // Handle Organization Sign Up
+        function handleOrgSignUp(event) {
+            event.preventDefault(); // Prevent default form submission
+            const orgName = document.getElementById('orgName').value;
+            const orgEmail = document.getElementById('orgEmail').value;
+            const orgPassword = document.getElementById('orgPassword').value;
+
+            console.log('Organization Sign Up Details:', { orgName, orgEmail, orgPassword });
+            alert('Organization Sign-Up Successful!');
+        }
+    </script>
+</body>
+</html>

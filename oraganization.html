@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organization Dashboard</title>
+    <link rel="stylesheet" href="organization.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Header Section -->
+        <header class="dashboard-header">
+            <h2><a href="Frontpage.html">Home</a></h2> 
+            <h1>Organization Dashboard</h1>
+            <div class="profile-section">
+                <button class="profile-btn">Admin</button>
+                <div class="profile-dropdown">
+                    <ul>
+                        <li><a href="#">Profile</a></li>
+                        <li><a href="#">Settings</a></li>
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- Upload Reports Section -->
+        <section class="upload-reports">
+            <h2>Upload Reports for Patients</h2>
+            <form id="upload-form">
+                <div class="form-group">
+                    <label for="token-number">Patient Token Number:</label>
+                    <input type="text" id="token-number" name="token-number" placeholder="Enter token number" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="report-date">Report Date:</label>
+                    <input type="date" id="report-date" name="report-date" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="organization-name">Organization Name:</label>
+                    <input type="text" id="organization-name" name="organization-name" placeholder="Enter your organization name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="report-type">Report Type:</label>
+                    <select id="report-type" name="report-type" required>
+                        <option value="" disabled selected>Select report type</option>
+                        <option value="Blood Test">Blood Test</option>
+                        <option value="X-Ray">X-Ray</option>
+                        <option value="MRI">MRI</option>
+                        <option value="CT Scan">CT Scan</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="report-file">Upload Report:</label>
+                    <input type="file" id="report-file" name="report-file" accept=".pdf,.doc,.docx,.jpg,.png" required>
+                </div>
+
+                <button type="submit">Upload Report</button>
+            </form>
+        </section>
+    </div>
+
+    <script src="org.js"></script>
+</body>
+</html>
