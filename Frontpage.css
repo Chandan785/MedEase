@@ -163,9 +163,33 @@ background-color: antiquewhite;
 
 @keyframes scroll-logos {
   from {
-    transform: translateX(0); /* Start position */
-  }
+    transform: translateX(0); 
+    }
   to {
-    transform: translateX(-100%); /* Scroll out completely */
+    transform: translateX(-100%); 
   }
 }
+
+.logo{
+  font-size: xx-large;
+  
+}
+
+.hero-content{
+  height: 400px;
+  margin-top: 200px;
+  justify-content: center;
+ 
+}
+.hero{
+  background-image: url("https://www.shutterstock.com/image-photo/laptop-keyboard-stethoscope-on-blue-260nw-1907543080.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+#about{
+  background-color: #005bb5;
+  color: white;
+}
+
+
