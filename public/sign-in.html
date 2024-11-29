@@ -42,8 +42,8 @@
             <h2>Sign In as Organization</h2>
             <label class="form-label" for="orgName">Organization Name</label>
             <input type="text" id="orgName" placeholder="Enter organization name" required>
-            <label class="form-label" for="orgId">Organization ID</label>
-            <input type="text" id="orgId" placeholder="Enter organization ID" required>
+            <label class="form-label" for="orgEmail">Organization Email</label>
+            <input type="text" id="orgEmail" placeholder="Enter organization email" required>
             <label class="form-label" for="orgPassword">Password</label>
             <input type="password" id="orgPassword" placeholder="Enter password" required>
             <button type="submit" class="form-btn">Submit</button>
@@ -67,33 +67,57 @@
         }
 
         // Handle User Sign In
-        function handleUserSignIn(event) {
-            event.preventDefault(); // Prevent form submission
+        async function handleUserSignIn(event) {
+            event.preventDefault();
             const abhaId = document.getElementById("abhaId").value;
             const userPassword = document.getElementById("userPassword").value;
 
-            // Basic validation (replace with server-side validation as needed)
-            if (abhaId === "user123" && userPassword === "password") {
-                alert("User Sign-In successful!");
-                window.location.href = "patient.html";
-            } else {
-                alert("Invalid ABHA ID or password.");
+            try {
+                const response = await fetch("/sign_in", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ ABHAID: abhaId, password: userPassword }),
+                });
+
+                if (response.ok) {
+                    alert("User Sign-In successful!");
+                    window.location.href = "patient.html";
+                } else if (response.status === 401) {
+                    alert("Invalid ABHA ID or password.");
+                } else {
+                    alert("An error occurred during sign-in.");
+                }
+            } catch (error) {
+                console.error("Error during User Sign-In:", error);
+                alert("An error occurred. Please try again.");
             }
         }
 
         // Handle Organization Sign In
-        function handleOrgSignIn(event) {
-            event.preventDefault(); // Prevent form submission
+        async function handleOrgSignIn(event) {
+            event.preventDefault();
             const orgName = document.getElementById("orgName").value;
-            const orgId = document.getElementById("orgId").value;
+            const orgId = document.getElementById("orgEmail").value;
             const orgPassword = document.getElementById("orgPassword").value;
 
-            // Basic validation (replace with server-side validation as needed)
-            if (orgName === "OrgABC" && orgId === "org123" && orgPassword === "password") {
-                alert("Organization Sign-In successful!");
-                window.location.href = "oraganization.html";
-            } else {
-                alert("Invalid organization credentials.");
+            try {
+                const response = await fetch("/sign_in_org", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ orgName, orgEmail, orgPassword }),
+                });
+
+                if (response.ok) {
+                    alert("Organization Sign-In successful!");
+                    window.location.href = "oraganization.html";
+                } else if (response.status === 401) {
+                    alert("Invalid organization credentials.");
+                } else {
+                    alert("An error occurred during sign-in.");
+                }
+            } catch (error) {
+                console.error("Error during Organization Sign-In:", error);
+                alert("An error occurred. Please try again.");
             }
         }
     </script>
