@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const app = express();
 
-// Middleware
+// Middleware 
 app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -16,7 +16,7 @@ const db = mongoose.connection;
 db.on("error", () => console.log("Error in Connecting to Database"));
 db.once("open", () => console.log("Connected to Database"));
 
-// User Schema
+// User Schema 
 const userSchema = new mongoose.Schema({
     name: String,
     ABHAID: String,
@@ -109,7 +109,7 @@ app.post("/sign_in_org", async (req, res) => {
         console.error("Error during Organization Sign-In:", err);
         res.status(500).send("Internal Server Error");
     }
-});
+}); 
 
 // Home Route
 app.get("/", (req, res) => {
