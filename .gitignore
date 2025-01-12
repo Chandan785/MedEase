@@ -1,0 +1,2 @@
+port=3001
+mongoDB_URL=mongodb+srv://chandankumar700451:Chandan211@cluster0.wtsxz.mongodb.net/medease?retryWrites=true&w=majority
