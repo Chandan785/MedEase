@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-
+require('dotenv').config();
 const app = express();
 
 // Middleware 
@@ -52,11 +52,12 @@ app.post("/sign_up", async (req, res) => {
 app.post("/sign_up_org", async (req, res) => {
     try {
         const { orgName, orgId, orgEmail, orgPassword } = req.body;
+        const uniqueEmailId = `${orgName.toLowerCase().replace(/\s+/g, '')}.${orgId}@example.com`;
 
         const newOrg = new Organization({
             orgName,
             orgId,
-            orgEmail,
+            orgEmail: uniqueEmailId,
             orgPassword,
         });
 
