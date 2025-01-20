@@ -4,18 +4,14 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 const app = express(); 
 
-app.use(bodyParser.json());``
+app.use(bodyParser.json());
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 const port = process.env.PORT || 3001;
 //mongoose.connect("mongodb://localhost:27017/MYStudent");
 //mongoose.connect("mongodb+srv://chandankumar700451:chandan700451@cluster0.kvvng.mongodb.net/MYStudent?retryWrites=true&w=majority");
 const mongoURL ="mongodb+srv://chandankumar700451:chandan700451@cluster0.kvvng.mongodb.net/MYStudent?retryWrites=true&w=majority";
-mongoose.connect(mongoURL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    ssl: true,  // Optional, but ensures SSL is enabled
-  });
+mongoose.connect(mongoURL);
   
 
 const db = mongoose.connection;
