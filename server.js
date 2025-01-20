@@ -68,7 +68,7 @@ app.post("/sign_up_org", async (req, res) => {
 // Home Route
 app.get("/", (req, res) => {
     res.set({ "Access-Control-Allow-Origin": "*" });
-    return res.redirect("sign-up.html");
+    return res.redirect("Frontpage.html");
 });
 
 // Start Server 
