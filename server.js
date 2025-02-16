@@ -9,7 +9,7 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3000;
-const port = process.env.mongoURL;
+const mongo_Url = process.env.mongoURL;
 
 // MongoDB Connection
 //const mongoURL = "mongodb://localhost:27017/MYStudent";
