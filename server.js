@@ -13,7 +13,7 @@ const mongo_Url = process.env.mongoURL;
 
 // MongoDB Connection
 //const mongoURL = "mongodb://localhost:27017/MYStudent";
-mongoose.connect(mongoURL)
+mongoose.connect(mongo_Url)
     .then(() => console.log("Connected to Database"))
     .catch((err) => console.error("Error connecting to Database:", err));
 
