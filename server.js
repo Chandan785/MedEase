@@ -9,15 +9,15 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3000;
+const mongo_Url = "mongodb://127.0.0.1:27017/MYStudent";
 
-
-const mongoURL ="mongodb+srv://chandankumar700451:chandan700451@cluster0.kvvng.mongodb.net/Medease?retryWrites=true&w=majority";
-//mongoose.connect(mongoURL);
 // MongoDB Connection
-//const mongoURL = "mongodb://localhost:27017/MYStudent";
-mongoose.connect(mongoURL)
-    .then(() => console.log("Connected to Database"))
-    .catch((err) => console.error("Error connecting to Database:", err));
+mongoose.connect(mongo_Url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log("Connected to Database"))
+.catch((err) => console.error("Error connecting to Database:", err));
 
 // User Schema
 const userSchema = new mongoose.Schema({
@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema({
     ABHAID: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
     },
     phno: String,
     email: String,
@@ -35,30 +35,29 @@ const User = mongoose.model("User", userSchema);
 
 // Organization Schema
 const orgSchema = new mongoose.Schema({
-    orgName: String,
+    orgName: {
+        type: String,
+        required: true,
+    },
     orgEmail: {
         type: String,
         required: true,
-        unique: true, // Ensure uniqueness
+        unique: true,
     },
-    orgPassword: String,
+    orgPassword: {
+        type: String,
+        required: true,
+    },
 });
 const Organization = mongoose.model("Organization", orgSchema);
 
-// Ensure Indexes are Created
-Organization.init().then(() => {
-   // console.log("Organization indexes created successfully");
-}).catch(err => {
-    console.error("Error creating Organization indexes:", err);
-});
-
 // User Sign-Up Route
-app.post("/sign_up", async (req, res) => { 
+app.post("/sign_up", async (req, res) => {
     try {
         const user = new User(req.body);
         await user.save();
         console.log("User Record Inserted Successfully");
-        res.send("User signup successful!");
+        res.redirect("Frontpage.html");
     } catch (err) {
         console.error("Error inserting user data:", err);
         if (err.code === 11000) {
@@ -82,7 +81,7 @@ app.post("/sign_up_org", async (req, res) => {
 
         await newOrg.save();
         console.log("Organization Record Inserted Successfully");
-        res.send("Organization signup successful!");
+        res.redirect("Frontpage.html");
     } catch (err) {
         console.error("Error inserting organization data:", err);
         if (err.code === 11000) {
@@ -128,29 +127,6 @@ app.post("/sign_in_org", async (req, res) => {
     } catch (err) {
         console.error("Error during Organization Sign-In:", err);
         res.status(500).send("Internal Server Error");
-    }
-});
-
-// Update User Route
-app.put("/update:id", async (req, res) => {
-    try {
-        const userId = req.params.id; // Extract the user ID from the URL parameter
-        const updatedUserData = req.body; // Get the updated data from the request body
-
-        const response = await User.findByIdAndUpdate(userId, updatedUserData, {
-            new: true, // Return the updated document
-            runValidators: true // Run validation on the updated data
-        });
-
-        if (!response) {
-            return res.status(404).json({ error: "User not found" }); // Handle case where user is not found
-        }
-
-        console.log("User data updated");
-        res.status(200).json(response); // Send the updated user data in the response
-    } catch (err) {
-        console.error("Error updating user:", err);
-        res.status(500).json({ error: "Internal server error" });
     }
 });
 
