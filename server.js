@@ -11,6 +11,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3000;
 
+// MongoDB Connection with loacal
+// const mongoURL = "mongodb://localhost:27017/MYStudent"; 
+
+// MongoDB Connection with atlas
+const mongoURL = process.env.MONGO_URL;
+
 // Serve static files from the "public" directory
 app.use(express.static("public"));
 
@@ -22,8 +28,8 @@ app.use(session({
     cookie: { secure: false } // Set to true if using HTTPS
 }));
 
-// MongoDB Connection
-const mongoURL = "mongodb://localhost:27017/MYStudent";
+
+
 mongoose.connect(mongoURL)
     .then(() => console.log("Connected to Database"))
     .catch((err) => console.error("Error connecting to Database:", err));
