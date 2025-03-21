@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const session = require('express-session'); // Import express-session
 require("dotenv").config();
 
 const app = express();
@@ -9,15 +10,23 @@ app.use(express.static("public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 const port = process.env.PORT || 3000;
-const mongo_Url = "mongodb://127.0.0.1:27017/MYStudent";
+
+// Serve static files from the "public" directory
+app.use(express.static("public"));
+
+// Session middleware setup
+app.use(session({
+    secret: 'your-secret-key', // Replace with a strong secret key
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Set to true if using HTTPS
+}));
 
 // MongoDB Connection
-mongoose.connect(mongo_Url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-})
-.then(() => console.log("Connected to Database"))
-.catch((err) => console.error("Error connecting to Database:", err));
+const mongoURL = "mongodb://localhost:27017/MYStudent";
+mongoose.connect(mongoURL)
+    .then(() => console.log("Connected to Database"))
+    .catch((err) => console.error("Error connecting to Database:", err));
 
 // User Schema
 const userSchema = new mongoose.Schema({
@@ -50,6 +59,62 @@ const orgSchema = new mongoose.Schema({
     },
 });
 const Organization = mongoose.model("Organization", orgSchema);
+
+// Middleware to check if user is authenticated
+const isAuthenticated = (req, res, next) => {
+    if (req.session.userId) {
+        next(); // User is authenticated
+    } else {
+        res.status(401).send("Unauthorized: Please log in.");
+    }
+};
+
+// Get current user data
+app.get('/get-user', isAuthenticated, async (req, res) => {
+    try {
+        const user = await User.findOne({ ABHAID: req.session.userId }); // Assuming you store userId in session
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (err) {
+        console.error('Error fetching user data:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Update user data
+app.post('/update-user', isAuthenticated, async (req, res) => {
+    try {
+        const { name, phno, email, password } = req.body;
+        const user = await User.findOneAndUpdate(
+            { ABHAID: req.session.userId },
+            { name, phno, email, password },
+            { new: true }
+        );
+        if (user) {
+            res.status(200).send('Profile updated successfully');
+        } else {
+            res.status(404).send('User not found');
+        }
+    } catch (err) {
+        console.error('Error updating user data:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
+// Logout user
+app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error('Error during logout:', err);
+            res.status(500).send('Internal Server Error');
+        } else {
+            res.status(200).send('Logout successful');
+        }
+    });
+});
 
 // User Sign-Up Route
 app.post("/sign_up", async (req, res) => {
@@ -99,6 +164,7 @@ app.post("/sign_in", async (req, res) => {
     try {
         const user = await User.findOne({ ABHAID, password });
         if (user) {
+            req.session.userId = user.ABHAID; // Store user ID in session
             console.log("User Sign-In Successful");
             res.status(200).send("User Sign-In Successful");
         } else {
