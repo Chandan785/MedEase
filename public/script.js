@@ -1,42 +1,98 @@
 document.addEventListener("DOMContentLoaded", () => {
     const profileBtn = document.querySelector(".profile-btn");
     const profileDropdown = document.querySelector(".profile-dropdown");
+    const profileSection = document.querySelector(".profile-section");
 
-    profileBtn.addEventListener("click", () => {
-        profileDropdown.style.display =
-            profileDropdown.style.display === "block" ? "none" : "block";
+    // Toggle Profile Dropdown
+    profileBtn.addEventListener("click", async () => {
+        try {
+            const response = await fetch("/get-user");
+            if (!response.ok) throw new Error("Failed to fetch user data");
+
+            const user = await response.json();
+            
+            // Inject User Details into the Profile Dropdown
+            profileDropdown.innerHTML = `
+                <ul class="user-info">
+                    <li><strong>Name:-</strong> <span id="name">${user.name}</span></li>
+                    <li><strong>ABHA ID:-</strong> <span id="ABHAID">${user.ABHAID}</span></li>
+                    <li><strong>Phone:-</strong> <span id="phno">${user.phno}</span></li>
+                    <li><strong>Email:-</strong> <span id="email">${user.email}</span></li>
+                   
+                </ul>
+                 
+                 <li><button id="edit-profile">Edit</button></li>
+                    <li><button id="logout">Logout</button></li>
+                     
+            `;
+
+            profileDropdown.style.display = "block";
+
+            // Attach event listener to Edit button AFTER injecting HTML
+            document.getElementById("edit-profile").addEventListener("click", () => {
+                showEditForm(user);
+            });
+
+            // Logout functionality
+            document.getElementById("logout").addEventListener("click", async () => {
+                await fetch("/logout", { method: "POST" });
+                alert("Logged out successfully!");
+                window.location.href = "Frontpage.html";
+            });
+
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+        }
     });
 
-    const form = document.getElementById("date-filter-form");
-    const reportRows = document.getElementById("report-rows");
-
-    form.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const startDate = document.getElementById("start-date").value;
-        const endDate = document.getElementById("end-date").value;
-
-        // Mock data to demonstrate functionality
-        const reports = [
-            { date: "2023-09-15", organization: "Clinic A", type: "X-Ray", link: "#" },
-            { date: "2023-10-10", organization: "Hospital B", type: "Blood Test", link: "#" },
-            { date: "2023-11-01", organization: "Lab C", type: "MRI", link: "#" }
-        ];
-
-        const filteredReports = reports.filter(report => {
-            return report.date >= startDate && report.date <= endDate;
-        });
-
-        reportRows.innerHTML = filteredReports.map(report => `
-            <tr>
-                <td>${report.date}</td>
-                <td>${report.organization}</td>
-                <td>${report.type}</td>
-                <td><a href="${report.link}" download>Download</a></td>
-            </tr>
-        `).join("");
-
-        if (filteredReports.length === 0) {
-            reportRows.innerHTML = `<tr><td colspan="4">No reports found for the selected date range.</td></tr>`;
+    // Close dropdown when clicking outside
+    document.addEventListener("click", (event) => {
+        if (!profileSection.contains(event.target)) {
+            profileDropdown.style.display = " ";
         }
     });
 });
+
+// Function to Show Edit Form
+function showEditForm(user) {
+    const profileDropdown = document.querySelector(".profile-dropdown");
+
+    // Replace existing profile details with input fields
+    profileDropdown.innerHTML = `
+        <ul class="edit-user-info">
+            <li><strong>Name:-</strong> <input type="text" id="edit-name" value="${user.name}"></li>
+            <li><strong>Phone:-</strong> <input type="text" id="edit-phno" value="${user.phno}"></li>
+            <li><strong>Email:-</strong> <input type="email" id="edit-email" value="${user.email}"></li>
+            <li><button id="save-profile">Save</button></li>
+            <li><button id="cancel-edit">Cancel</button></li>
+        </ul>
+    `;
+
+    // Attach event listeners for Save and Cancel buttons
+    document.getElementById("save-profile").addEventListener("click", saveProfile);
+    document.getElementById("cancel-edit").addEventListener("click", () => {
+        profileDropdown.style.display = "none"; // Close edit form
+    });
+}
+
+// Function to Save Updated Profile
+async function saveProfile() {
+    const name = document.getElementById("edit-name").value;
+    const phno = document.getElementById("edit-phno").value;
+    const email = document.getElementById("edit-email").value;
+
+    try {
+        const response = await fetch("/update-user", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, phno, email })
+        });
+
+        if (!response.ok) throw new Error("Failed to update user");
+
+        alert("Profile updated successfully!");
+        location.reload(); // Refresh page to fetch updated profile data
+    } catch (error) {
+        console.error("Error updating profile:", error);
+    }
+}

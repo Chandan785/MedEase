@@ -48,6 +48,21 @@ header h1 {
 .profile-section {
     position: relative;
 }
+#edit-profile , #logout ,#save-profile , #cancel-edit{
+    display: block;
+    width: 40%;
+    text-align: center;
+    background: #2575fc;
+    color: white;
+    padding: 8px;
+    border-radius: 5px;
+    font-weight: 600;
+    margin-top: 1px;
+    margin-left: 35%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+ 
 
 .profile-btn {
     background: #ffffff;
@@ -262,5 +277,26 @@ h2 a{
     .date-filter input {
         width: 100%;
         margin-bottom: 10px;
+    }
+}
+
+
+.user-info li{
+     display: inline-flex;
+}
+
+
+@media (max-width: 768px) {
+    .profile-dropdown {
+        position: fixed;
+        top: 50px;
+        right: 10px;
+        width: 90%;
+        max-width: 300px;
+    }
+
+    .profile-btn {
+        width: 100%;
+        text-align: center;
     }
 }
