@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const profileSection = document.querySelector(".profile-section");
 
     // Toggle Profile Dropdown
-    profileBtn.addEventListener("click", async () => {
+    profileBtn.addEventListener("click", async (event) => {
+        event.stopPropagation(); // Prevents the click from propagating to the document
         try {
             const response = await fetch("/get-user");
             if (!response.ok) throw new Error("Failed to fetch user data");
@@ -18,18 +19,16 @@ document.addEventListener("DOMContentLoaded", () => {
                     <li><strong>ABHA ID:-</strong> <span id="ABHAID">${user.ABHAID}</span></li>
                     <li><strong>Phone:-</strong> <span id="phno">${user.phno}</span></li>
                     <li><strong>Email:-</strong> <span id="email">${user.email}</span></li>
-                   
                 </ul>
-                 
-                 <li><button id="edit-profile">Edit</button></li>
-                    <li><button id="logout">Logout</button></li>
-                     
+                <li><button id="edit-profile">Edit</button></li>
+                <li><button id="logout">Logout</button></li>
             `;
 
             profileDropdown.style.display = "block";
 
             // Attach event listener to Edit button AFTER injecting HTML
-            document.getElementById("edit-profile").addEventListener("click", () => {
+            document.getElementById("edit-profile").addEventListener("click", (e) => {
+                e.stopPropagation(); // Prevent closing when clicking the edit button
                 showEditForm(user);
             });
 
@@ -47,8 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Close dropdown when clicking outside
     document.addEventListener("click", (event) => {
-        if (!profileSection.contains(event.target)) {
-            profileDropdown.style.display = " ";
+        if (!profileSection.contains(event.target) && !profileDropdown.contains(event.target)) {
+            profileDropdown.style.display = "none"; // Properly hide the dropdown
         }
     });
 });
@@ -57,7 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
 function showEditForm(user) {
     const profileDropdown = document.querySelector(".profile-dropdown");
 
-    // Replace existing profile details with input fields
     profileDropdown.innerHTML = `
         <ul class="edit-user-info">
             <li><strong>Name:-</strong> <input type="text" id="edit-name" value="${user.name}"></li>
@@ -70,7 +68,8 @@ function showEditForm(user) {
 
     // Attach event listeners for Save and Cancel buttons
     document.getElementById("save-profile").addEventListener("click", saveProfile);
-    document.getElementById("cancel-edit").addEventListener("click", () => {
+    document.getElementById("cancel-edit").addEventListener("click", (e) => {
+        e.stopPropagation(); // Prevent closing when clicking the cancel button
         profileDropdown.style.display = "none"; // Close edit form
     });
 }
